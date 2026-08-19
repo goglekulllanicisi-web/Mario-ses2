@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>LEGO Mario Ses Testi</title>
+</head>
+<body>
+  <h2>LEGO Mario Özel Ses Yükleyici</h2>
+  <button id="baglanBtn" style="font-size: 20px; padding: 15px;">1. Mario'ya Bağlan</button>
+  <p id="durum">Durum: Bekliyor...</p>
+
+  <script>
+    // Burayı senin dosya isminle değiştirdim
+    const ozelSes = new Audio('25. Course Clear.flac');
+
+    document.getElementById('baglanBtn').addEventListener('click', async () => {
+      try {
+        document.getElementById('durum').innerText = "Durum: Mario aranıyor...";
+        
+        const device = await navigator.bluetooth.requestDevice({
+          acceptAllDevices: true,
+          optionalServices: ['00001623-1212-efde-1623-785feabcd123']
+        });
+
+        document.getElementById('durum').innerText = "Durum: Bağlandı! Mario'yu zıplat.";
+        const server = await device.gatt.connect();
+        ozelSes.play();
+
+      } catch (error) {
+        document.getElementById('durum').innerText = "Hata: " + error;
+      }
+    });
+  </script>
+</body>
+</html>
